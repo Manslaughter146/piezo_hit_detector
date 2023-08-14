@@ -4,7 +4,7 @@
 #define N_SENSOR 5                       // Number of used sensors
 #define N_SAMPLE 10                      // Number of samples to average
 #define HIT_RECOGNITION_DELAY 1000       // Minimal time [ms] delay between two hits
-#define MULTIHIT_TIMER 500               // How long to wait for possible multi-sensor hit
+#define MULTIHIT_TIMER 500               // Maximum time for detecting a hit with multiple sensors
 
 // Fill these with your project specific data
 uint8_t Sensor_pins[N_SENSOR]   = {13, 14, 15, 16, 17};     // What pins are your sensors connected to
