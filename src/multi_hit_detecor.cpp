@@ -30,27 +30,10 @@ bool data_in_bounds(float* thresh_table, float* data_table, int table_len){
   
   // If a hit happenned in the last [HIT_RECOGNITION_DELAY] ms         AND
   // If the time from first sensor hit is greater than [MULTIHIT_TIMER] ms
-
   if (since_hit < HIT_RECOGNITION_DELAY && since_first_hit > MULTIHIT_TIMER){
     
     //If any sensor registered a hit <- should always be true in this case
     if(std::any_of(sensor_hit, sensor_hit + N_SENSOR,[](bool val){ return val;})) { 
-      
-      //react to getting hit
-      char temp[N_SENSOR] = {0};
-      for(int i = 0; i<N_SENSOR; i++){
-        if(sensor_hit[i]){
-          temp[i] = 48+i;                     //show sensor ID
-        }
-        else{
-          temp[i] = ' ';
-        }
-        
-      }
-      Serial.print("HIT: ");
-      Serial.println(temp);
-
-      clear_hits();
       return false;                          //Inform that there was a hit in the last [HIT_RECOGNITION_DELAY] ms
       }
     }
@@ -108,8 +91,21 @@ void loop()
   }
 
   // Check if sensor data is lower than the threshold set for it
-  // React accordingly if not
-  data_in_bounds(threshold,sensor_data,N_SENSOR);
-  
+  // React to getting shot if not
+  if(!data_in_bounds(threshold,sensor_data,N_SENSOR)){
+      char temp[N_SENSOR] = {0};
+      for(int i = 0; i<N_SENSOR; i++){
+        if(sensor_hit[i]){
+          temp[i] = 48+i;                     //show sensor ID
+        }
+        else{
+          temp[i] = ' ';
+        }
+      }
+      Serial.print("HIT: ");
+      Serial.println(temp);
+
+      clear_hits();
+  }
   delayMicroseconds(2000); // small delay
 }
